@@ -1,111 +1,77 @@
-//3. Do necessory changes in code of stack if top is initialized to 0.
+#include <stdio.h>
+#include <string.h>
 
-#include<stdio.h>
-#include<stdlib.h>
-#define SIZE 5
-
-typedef struct stack
+struct Student 
 {
-    int arr[SIZE];
-    int top;
-}stack;
+    int rollno;
+    char name[50];
+    int marks;
+};
 
-int peek(stack *ps);
-void init_stack(stack *ps);
-void push(stack *ps, int data);
-void pop(stack *ps);
-int stack_full(stack *ps);
-int stack_empty(stack *ps);
+// Function to perform bubble sort on the array of students
+void bubbleSort(struct Student students[], int n);
 
-int main()
+
+int main() 
 {
-    stack S;
-    init_stack(&S);
-    
-    int choice;
-do{
-    printf("\n Enter choice: \n");
-    printf("0.Exit...\n");
-    printf("1.Push...\n");
-    printf("2.Pop...\n");
-    printf("3.Peek...\n");
-    scanf("%d", &choice);
+    struct Student students[10] =
+     {
+        {8001, "Poonam", 89},
+        {8002, "Komal", 88},
+        {8003, "Anu", 87},
+        {8004, "Pranali", 70},
+        {8005, "Pranita", 65},
+        {8006, "Archana", 84},
+        {8007, "Bhagya", 57},
+        {8008, "Rutuja", 88},
+        {8009, "Mira", 95},
+        {8010, "Vrunda", 90}
+    };
 
-    switch(choice)
+    int n = 10;
+
+    printf("Unsorted List of Students:\n");
+    for (int i = 0; i < n; i++) 
     {
-        case 0:exit(0);
-        case 1:
-               if(stack_full(&S))
-                  printf("Stack is Full!!\n");
-               else
-                {
-                    int data;
-                    printf("Enter the element to insert..");
-                    scanf("%d", &data);
-                    push(&S, data);
-                    printf("Element inserted =%d", data);
-                }
-                break;
-        case 2:
-            if(stack_empty(&S))
-               printf("Stack EMpty!!!");
-            else
-            {
-                int ele = peek(&S);
-                pop(&S);
-                printf("Element popped=%d", ele);
-            }
-            break;
-        case 3:
-            if(stack_empty(&S))
-               printf("Stack empty!! Peek not possible..");
-            else
-            {
-                int ele =peek(&S);
-                printf("Topmost element= %d\n", ele);
-            }
-            break;
-        default:
-           printf("Invalid choice! Kindly enter valid choice...\n");
+        printf("Roll No: %d, Name: %s, Marks: %d\n", students[i].rollno, students[i].name, students[i].marks);
     }
-}while(choice != 0);
+
+    // Sort the students by marks
+    bubbleSort(students, n);
+
+    printf("\nSorted List of Students by Marks:\n");
+    for (int i = 0; i < n; i++)
+    {
+        printf("Roll No: %d, Name: %s, Marks: %d\n", students[i].rollno, students[i].name, students[i].marks);
+    }
 
     return 0;
 }
 
-
-void init_stack(stack *ps)
+void bubbleSort(struct Student students[], int n)
 {
-    ps->top = 0;
-}
+    struct Student temp;
+    int swapped;
 
-void push(stack *ps, int data)
-{
-    ps->arr[ps->top]=data;
-    ps->top++;
-}
-
-void pop(stack *ps)
+    for (int i = 0; i < n - 1; i++) 
     {
-    if (ps->top > 0) 
-    {  // Check if the stack is not empty
-        ps->top--;
-        ps->arr[ps->top] = 0;
+        swapped = 0;
+        for (int j = 0; j < n - i - 1; j++) 
+        {
+            if (students[j].marks > students[j + 1].marks) 
+            {
+                // Swap the two students
+                temp = students[j];
+                students[j] = students[j + 1];
+                students[j + 1] = temp;
+                swapped = 1;
+            }
+        }
+
+        // If no two elements were swapped in the inner loop, the array is already sorted
+        if (swapped == 0) 
+        {
+            break;
+        }
     }
-}  
-
-
-int stack_full(stack *ps)
-{
-    return ps->top == SIZE-1;
-}
-
-int stack_empty(stack *ps)
-{
-    return ps->top ==0;
-}
-
-int peek(stack *ps)
-{
-    return ps->arr[ps->top];
 }
